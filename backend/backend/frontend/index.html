@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMU Campus Ecosystem</title>
+  <meta name="theme-color" content="#5a281b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="GMU Campus" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="login-screen" id="loginScreen">
+    <form class="login-card" id="loginForm">
+      <img class="login-logo" src="assets/gm-university-logo.png" alt="GM University official logo" />
+      <h1>GMU Campus Ecosystem</h1>
+      <p>GM University Davangere</p>
+      <label for="username">Username</label>
+      <input id="username" autocomplete="username" required />
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" required />
+      <div class="register-fields" id="registerFields" hidden>
+        <label for="fullName">Full name</label>
+        <input id="fullName" autocomplete="name" />
+      </div>
+      <div class="login-error" id="loginError"></div>
+      <button class="btn gold login-button" type="submit">Sign in</button>
+      <button class="auth-toggle" id="authToggle" type="button">New user? Register</button>
+    </form>
+  </section>
+
+  <button class="install-app-button" id="installAppButton" type="button" hidden>Install GMU Campus App</button>
+  <div class="app-shell" id="appShell" hidden>
+  <header class="topbar">
+    <div class="brand">
+      <img class="logo" src="assets/gm-university-logo.png" alt="GM University official logo" />
+      <div><strong>GMU Campus Ecosystem</strong><small>GM University Davangere</small></div>
+    </div>
+    <div class="user"><span id="currentUser">Admin</span> &#9679; Online &nbsp; <button class="logout-button" id="logoutButton" type="button">Logout</button></div>
+  </header>
+
+  <nav class="side" id="nav"></nav>
+  <main id="main"></main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
