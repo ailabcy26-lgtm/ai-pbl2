@@ -40,8 +40,8 @@ app.post('/api/login', (req, res) => {
   const username = String(req.body.username || '').trim().toLowerCase();
   const password = String(req.body.password || '');
   const configuredUsername = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
-  const configuredPassword = process.env.ADMIN_PASSWORD || 'admin123';
-  if (username === configuredUsername && password === configuredPassword) {
+  const configuredPassword = process.env.ADMIN_PASSWORD || (process.env.NODE_ENV === 'production' ? '' : 'admin123');
+  if (configuredPassword && username === configuredUsername && password === configuredPassword) {
     return res.json({ ok: true, username: configuredUsername, role: 'Administrator' });
   }
   const user = readUsers().find((item) => item.username === username);
