@@ -196,6 +196,27 @@ app.post('/api/ai', async (req, res) => {
       return res.json({ answer: data.message?.content || 'No response returned by Ollama.' });
     }
 
+    if (provider === 'groq') {
+      const key = process.env.GROQ_API_KEY;
+      if (!key) return res.status(503).json({ error: 'Hosted AI is not configured. Add GROQ_API_KEY in the hosting environment.' });
+
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+        body: JSON.stringify({
+          model: process.env.AI_MODEL || 'llama-3.3-70b-versatile',
+          max_tokens: 800,
+          messages: [
+            { role: 'system', content: (SYSTEMS[task] || SYSTEMS.chatbot) + RESPONSIBLE },
+            { role: 'user', content: prompt },
+          ],
+        }),
+      });
+      const data = await r.json();
+      if (!r.ok) return res.status(500).json({ error: data.error?.message || 'Hosted AI returned an error' });
+      return res.json({ answer: data.choices?.[0]?.message?.content || 'No response returned by hosted AI.' });
+    }
+
     const key = process.env.ANTHROPIC_API_KEY;
     if (!key) return res.status(503).json({ error: 'Anthropic live AI is not configured. Set ANTHROPIC_API_KEY or use AI_PROVIDER=ollama.' });
 
@@ -213,9 +234,11 @@ app.post('/api/ai', async (req, res) => {
     if (!r.ok) return res.status(500).json({ error: data.error?.message || 'AI error' });
     res.json({ answer: data.content.map((c) => c.text || '').join('\n') });
   } catch (e) {
-    const message = e.name === 'TimeoutError'
-      ? 'Local AI timed out. Keep Ollama running and try a shorter prompt.'
-      : 'Cannot reach local AI. Make sure Ollama is running.';
+    const message = provider === 'ollama'
+      ? e.name === 'TimeoutError'
+        ? 'Local AI timed out. Keep Ollama running and try a shorter prompt.'
+        : 'Cannot reach local AI. Make sure Ollama is running.'
+      : 'Cannot reach the hosted AI provider. Please try again later.';
     res.status(503).json({ error: message });
   }
 });
