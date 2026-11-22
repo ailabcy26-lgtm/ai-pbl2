@@ -204,7 +204,7 @@ app.post('/api/ai', async (req, res) => {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
         body: JSON.stringify({
-          model: process.env.AI_MODEL || 'llama-3.3-70b-versatile',
+          model: process.env.AI_MODEL || 'openai/gpt-oss-20b',
           max_tokens: 800,
           messages: [
             { role: 'system', content: (SYSTEMS[task] || SYSTEMS.chatbot) + RESPONSIBLE },

@@ -12,7 +12,7 @@ services:
       - key: AI_PROVIDER
         value: groq
       - key: AI_MODEL
-        value: llama-3.3-70b-versatile
+        value: openai/gpt-oss-20b
       - key: GROQ_API_KEY
         sync: false
       - key: ADMIN_USERNAME
